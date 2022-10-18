@@ -19,7 +19,7 @@ public:
     void RawEvent(SDL_Event event, int _windowWidth, int _windowHeight);
     void Event(SDL_Event event);
     void Start();
-    void Update();
+    void Update(int _windowWidth, int _windowHeight);
     void Render();
     
 private:

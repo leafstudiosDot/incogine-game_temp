@@ -90,7 +90,7 @@ void Game::Start() {
     Console console;
 }
 
-void Game::Update() {
+void Game::Update(int _windowWidth, int _windowHeight) {
     // Executes every frame at game
 }
 
