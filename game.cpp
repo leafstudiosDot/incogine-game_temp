@@ -19,7 +19,7 @@ Game::~Game() {
     console.Println("Game purged successfully");
 }
 
-float playerx = 0, playery = 0, speed = 5;
+float playerx = 50, playery = 50, speed = 5;
 const Uint8 *_Pkeyboard = SDL_GetKeyboardState(0);
 
 
@@ -73,6 +73,10 @@ void Game::Event(SDL_Event event) {
         case SDLK_LEFT:
             console.Println("Left Key Pressed");
             break;
+        case SDLK_r:
+            playery = 50;
+            playerx = 50;
+            break;
         }
     }
     // Released
@@ -101,11 +105,11 @@ void Game::Render() {
     glPushMatrix();
     glTranslated(playerx, playery, 0);
     glBegin(GL_QUADS);
-        glColor3ub(255, 0, 0);
+        glColor3ub(255, 255, 255);
         glVertex2f(0, 0);
-        glVertex2f(100, 0);
-        glVertex2f(100, 100);
-        glVertex2f(0, 100);
+        glVertex2f(50, 0);
+        glVertex2f(50, 50);
+        glVertex2f(0, 50);
     glEnd();
     glPopMatrix();
 }
