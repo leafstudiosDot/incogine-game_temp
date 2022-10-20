@@ -98,10 +98,23 @@ void Game::Update(int _windowWidth, int _windowHeight) {
     // Executes every frame at game
 }
 
+//SDL_Rect _whatsoeva_position;
+//SDL_Color _whatsoeva_color;
+//Fonts *whatsoeva;
+
 void Game::Render() {
     // Render Game
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+    
+    /*_whatsoeva_color.r = 255;
+    _whatsoeva_color.g = 255;
+    _whatsoeva_color.b = 255;
+    _whatsoeva_color.a = 255;
+    _whatsoeva_position.x = 0;
+    _whatsoeva_position.y = 0;
+    whatsoeva->RenderFont("What", &_whatsoeva_position, _whatsoeva_color);*/
+    
     glPushMatrix();
     glTranslated(playerx, playery, 0);
     glBegin(GL_QUADS);
