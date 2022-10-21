@@ -7,6 +7,8 @@
 
 #include "game.hpp"
 
+TTF_Font *font;
+
 Game::Game() {
     // Initialize Game
     Console console;
@@ -92,29 +94,26 @@ void Game::Event(SDL_Event event) {
 void Game::Start() {
     // Executes as game launches
     Console console;
+    const char fontFile[] = "./def_font.ttf";
+    
+    if(!(font = TTF_OpenFont(fontFile, 20))) {
+        printf("Error loading font: %s", TTF_GetError());
+    }
 }
 
 void Game::Update(int _windowWidth, int _windowHeight) {
     // Executes every frame at game
 }
 
-//SDL_Rect _whatsoeva_position;
-//SDL_Color _whatsoeva_color;
-//Fonts *whatsoeva;
+SDL_Rect _whatsoeva_position;
+SDL_Color _whatsoeva_color;
+Fonts *whatsoeva;
 
 void Game::Render() {
     // Render Game
-    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
     
-    /*_whatsoeva_color.r = 255;
-    _whatsoeva_color.g = 255;
-    _whatsoeva_color.b = 255;
-    _whatsoeva_color.a = 255;
-    _whatsoeva_position.x = 0;
-    _whatsoeva_position.y = 0;
-    whatsoeva->RenderFont("What", &_whatsoeva_position, _whatsoeva_color);*/
-    
+    // 3D Game
     glPushMatrix();
     glTranslated(playerx, playery, 0);
     glBegin(GL_QUADS);
@@ -125,4 +124,38 @@ void Game::Render() {
         glVertex2f(0, 50);
     glEnd();
     glPopMatrix();
+    
+    // HUD Mode
+    // Enable
+    int vPort[4];
+    glGetIntegerv(GL_VIEWPORT, vPort);
+    glMatrixMode(GL_PROJECTION);
+    glPushMatrix();
+    glLoadIdentity();
+    glOrtho(0, vPort[2], 0, vPort[3], -1, 1);
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+    glLoadIdentity();
+    glDisable(GL_DEPTH_TEST);
+    // End Enable
+    
+    _whatsoeva_color.r = 255;
+    _whatsoeva_color.g = 255;
+    _whatsoeva_color.b = 255;
+    _whatsoeva_color.a = 255;
+    _whatsoeva_position.x = 50;
+    _whatsoeva_position.y = 50;
+    whatsoeva->RenderFont(font, "W", &_whatsoeva_position, _whatsoeva_color);
+    
+    // Disable
+    glEnable(GL_DEPTH_TEST);
+    glMatrixMode(GL_PROJECTION);
+    glPopMatrix();
+    glMatrixMode(GL_MODELVIEW);
+    glPopMatrix();
+    // End Disable
+}
+
+void Game::Destroy() {
+    TTF_CloseFont(font);
 }

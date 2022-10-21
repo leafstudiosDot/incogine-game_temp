@@ -20,7 +20,7 @@ public:
     void Start();
     void Update(int _windowWidth, int _windowHeight);
     void Render();
-    
+    void Destroy();
 private:
     int SceneNow;
 };
