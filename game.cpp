@@ -23,7 +23,7 @@ Game::~Game() {
     console.Println("Game purged successfully");
 }
 
-float playerx = 0.0f, playery = 3.0f, speed = 0.1f;
+float playerx = 0.0f, playery = 3.0f, speed = 0.05f;
 const Uint8 *_Pkeyboard = SDL_GetKeyboardState(0);
 
 
@@ -116,6 +116,8 @@ void Game::Update(int _windowWidth, int _windowHeight) {
 SDL_Color _whatsoeva_color;
 Fonts *whatsoeva;
 
+Fonts *renderdebug_position2;
+
 void Game::Render() {
     // Render Game
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
@@ -128,16 +130,20 @@ void Game::Render() {
     _whatsoeva_color.g = 255;
     _whatsoeva_color.b = 255;
     _whatsoeva_color.a = 100;
-    whatsoeva->RenderFont(font, "Welcome", 0, 0, 0, _whatsoeva_color, 4.7f);
+    whatsoeva->RenderFont(font, "Welcome", 5.0f, 0, 0, _whatsoeva_color, 3.0f, 1.0f);
     
+    // Debug Point
+    //const char* deb = (char)playerx + ", " + (char)playery;
+    //renderdebug_position2->RenderFont(font, "", 0, 0, 0, {255, 255, 255, 255}, 0.25f, 0.2f);
+    cout << "X: " << playerx << " Y: " << playery << endl;
     glPushMatrix();
     glTranslated(playerx, playery, 0);
     glBegin(GL_QUADS);
         glColor3ub(255, 255, 255);
         glVertex2f(0, 0);
-        glVertex2f(1, 0);
-        glVertex2f(1, 1);
-        glVertex2f(0, 1);
+        glVertex2f(0.05f, 0);
+        glVertex2f(0.05f, 0.05f);
+        glVertex2f(0, 0.05f);
     glEnd();
     glPopMatrix();
 }
