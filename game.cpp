@@ -8,6 +8,8 @@
 #include "game.hpp"
 
 TTF_Font *font;
+int p_windowWidth;
+int p_windowHeight;
 
 Game::Game() {
     // Initialize Game
@@ -21,7 +23,7 @@ Game::~Game() {
     console.Println("Game purged successfully");
 }
 
-float playerx = 50, playery = 50, speed = 5;
+float playerx = 0.0f, playery = -2.0f, speed = 0.1f;
 const Uint8 *_Pkeyboard = SDL_GetKeyboardState(0);
 
 
@@ -47,14 +49,14 @@ void Game::RawEvent(SDL_Event event, int _windowWidth, int _windowHeight) {
 
     if (_Pkeyboard[SDL_SCANCODE_W]) {
         // Pressed
-        playery -= speed;
+        playery += speed;
     } else {
         // Released
     }
     
     if (_Pkeyboard[SDL_SCANCODE_S]) {
         // Pressed
-        playery += speed;
+        playery -= speed;
     } else {
         // Released
     }
@@ -76,8 +78,8 @@ void Game::Event(SDL_Event event) {
             console.Println("Left Key Pressed");
             break;
         case SDLK_r:
-            playery = 50;
-            playerx = 50;
+            playery = 0;
+            playerx = 0;
             break;
         }
     }
@@ -94,27 +96,31 @@ void Game::Event(SDL_Event event) {
 void Game::Start() {
     // Executes as game launches
     Console console;
-    const char fontFile[] = "./def_font.ttf";
+    const char fontFile[] = "../Resources/fonts/def_font.ttf";
     
-    if(!(font = TTF_OpenFont(fontFile, 20))) {
+    if(!(font = TTF_OpenFont(fontFile, 100))) {
         printf("Error loading font: %s", TTF_GetError());
     }
+    
+    glDepthFunc(GL_LESS);
+    glEnable(GL_DEPTH_TEST);
+    glShadeModel(GL_SMOOTH);
 }
 
 void Game::Update(int _windowWidth, int _windowHeight) {
     // Executes every frame at game
+    p_windowWidth = _windowWidth;
+    p_windowHeight = _windowHeight;
 }
 
-SDL_Rect _whatsoeva_position;
 SDL_Color _whatsoeva_color;
 Fonts *whatsoeva;
 
 void Game::Render() {
     // Render Game
-    glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
     
     // 3D Game
-    glPushMatrix();
+    /*glPushMatrix();
     glTranslated(playerx, playery, 0);
     glBegin(GL_QUADS);
         glColor3ub(255, 255, 255);
@@ -123,17 +129,11 @@ void Game::Render() {
         glVertex2f(50, 50);
         glVertex2f(0, 50);
     glEnd();
-    glPopMatrix();
+    glPopMatrix();*/
     
     // HUD Mode
     // Enable
-    int vPort[4];
-    glGetIntegerv(GL_VIEWPORT, vPort);
-    glMatrixMode(GL_PROJECTION);
-    glPushMatrix();
-    glLoadIdentity();
-    glOrtho(0, vPort[2], 0, vPort[3], -1, 1);
-    glMatrixMode(GL_MODELVIEW);
+    /*glMatrixMode(GL_MODELVIEW);
     glPushMatrix();
     glLoadIdentity();
     glDisable(GL_DEPTH_TEST);
@@ -152,8 +152,34 @@ void Game::Render() {
     glMatrixMode(GL_PROJECTION);
     glPopMatrix();
     glMatrixMode(GL_MODELVIEW);
-    glPopMatrix();
+    glPopMatrix();*/
     // End Disable
+    // End HUD Mode
+
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluPerspective(70.0f, p_windowWidth / (float)p_windowHeight, 0.1f, 70.0f);
+
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+    glTranslatef(-11.0f, 0.0f, -10.0f);
+    
+    _whatsoeva_color.r = 255;
+    _whatsoeva_color.g = 255;
+    _whatsoeva_color.b = 255;
+    _whatsoeva_color.a = 255;
+    whatsoeva->RenderFont(font, "Welcome", 0, 0, 0, _whatsoeva_color, 4.7f);
+    
+    glPushMatrix();
+    glTranslated(playerx, playery, 0);
+    glBegin(GL_QUADS);
+        glColor3ub(255, 255, 255);
+        glVertex2f(0, 0);
+        glVertex2f(1, 0);
+        glVertex2f(1, 1);
+        glVertex2f(0, 1);
+    glEnd();
+    glPopMatrix();
 }
 
 void Game::Destroy() {
