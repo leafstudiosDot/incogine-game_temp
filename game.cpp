@@ -23,7 +23,7 @@ Game::~Game() {
     console.Println("Game purged successfully");
 }
 
-float playerx = 0.0f, playery = -2.0f, speed = 0.1f;
+float playerx = 0.0f, playery = 3.0f, speed = 0.1f;
 const Uint8 *_Pkeyboard = SDL_GetKeyboardState(0);
 
 
@@ -118,56 +118,16 @@ Fonts *whatsoeva;
 
 void Game::Render() {
     // Render Game
+    glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
     
-    // 3D Game
-    /*glPushMatrix();
-    glTranslated(playerx, playery, 0);
-    glBegin(GL_QUADS);
-        glColor3ub(255, 255, 255);
-        glVertex2f(0, 0);
-        glVertex2f(50, 0);
-        glVertex2f(50, 50);
-        glVertex2f(0, 50);
-    glEnd();
-    glPopMatrix();*/
-    
-    // HUD Mode
-    // Enable
-    /*glMatrixMode(GL_MODELVIEW);
-    glPushMatrix();
+    glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    glDisable(GL_DEPTH_TEST);
-    // End Enable
+    glTranslated(-11.0f, 0.0f, -10.0f);
     
     _whatsoeva_color.r = 255;
     _whatsoeva_color.g = 255;
     _whatsoeva_color.b = 255;
-    _whatsoeva_color.a = 255;
-    _whatsoeva_position.x = 50;
-    _whatsoeva_position.y = 50;
-    whatsoeva->RenderFont(font, "W", &_whatsoeva_position, _whatsoeva_color);
-    
-    // Disable
-    glEnable(GL_DEPTH_TEST);
-    glMatrixMode(GL_PROJECTION);
-    glPopMatrix();
-    glMatrixMode(GL_MODELVIEW);
-    glPopMatrix();*/
-    // End Disable
-    // End HUD Mode
-
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    gluPerspective(70.0f, p_windowWidth / (float)p_windowHeight, 0.1f, 70.0f);
-
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-    glTranslatef(-11.0f, 0.0f, -10.0f);
-    
-    _whatsoeva_color.r = 255;
-    _whatsoeva_color.g = 255;
-    _whatsoeva_color.b = 255;
-    _whatsoeva_color.a = 255;
+    _whatsoeva_color.a = 100;
     whatsoeva->RenderFont(font, "Welcome", 0, 0, 0, _whatsoeva_color, 4.7f);
     
     glPushMatrix();
