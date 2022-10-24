@@ -125,7 +125,10 @@ void Game::Render() {
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
     
-    gluLookAt(playerx, 0.0f, (playery*(-1)), playerx, 0.0f, -100, 0, 1, 0);
+    // Use in 3D Camera Movement (First Person)
+    // gluLookAt(playerx, 0.0f, (playery*(-1)), playerx, 0.0f, -100, 0, 1, 0);
+    // Use in 2D Camera Movement (Top Down)
+    gluLookAt((playerx*(-1)), (playery*(-1)), 0.0f, (playerx*(-1)), (playery*(-1)), -100, 0, 1, 0);
     
     glPushMatrix();
     glTranslated(-11.0f, 0.0f, -10.0f);
