@@ -23,7 +23,7 @@ Game::~Game() {
     console.Println("Game purged successfully");
 }
 
-float playerx = 0.0f, playery = 3.0f, speed = 0.05f;
+float playerx = 0.0f, playery = 0.0f, speed = 0.05f;
 const Uint8 *_Pkeyboard = SDL_GetKeyboardState(0);
 
 
@@ -124,20 +124,24 @@ void Game::Render() {
     
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    glTranslated(-11.0f, 0.0f, -10.0f);
     
+    gluLookAt(playerx, 0.0f, (playery*(-1)), playerx, 0.0f, -100, 0, 1, 0);
+    
+    glPushMatrix();
+    glTranslated(-11.0f, 0.0f, -10.0f);
     _whatsoeva_color.r = 255;
     _whatsoeva_color.g = 255;
     _whatsoeva_color.b = 255;
     _whatsoeva_color.a = 100;
     whatsoeva->RenderFont(font, "Welcome", 5.0f, 0, 0, _whatsoeva_color, 3.0f, 1.0f);
+    glPopMatrix();
     
     // Debug Point
     //const char* deb = (char)playerx + ", " + (char)playery;
     //renderdebug_position2->RenderFont(font, "", 0, 0, 0, {255, 255, 255, 255}, 0.25f, 0.2f);
     cout << "X: " << playerx << " Y: " << playery << endl;
     glPushMatrix();
-    glTranslated(playerx, playery, 0);
+    glTranslated(0, 3.0f, 0);
     glBegin(GL_QUADS);
         glColor3ub(255, 255, 255);
         glVertex2f(0, 0);
