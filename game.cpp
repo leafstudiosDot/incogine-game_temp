@@ -24,6 +24,9 @@ Game::~Game() {
 }
 
 float playerx = 0.0f, playery = 0.0f, speed = 0.05f;
+float camx = 0.0f, camy = 0.0f, camsensitivity = 0.05f;
+float angle = 0.0f, fraction = 0.1f;
+
 const Uint8 *_Pkeyboard = SDL_GetKeyboardState(0);
 
 
@@ -41,7 +44,7 @@ void Game::RawEvent(SDL_Event event, int _windowWidth, int _windowHeight) {
     
     if (_Pkeyboard[SDL_SCANCODE_A]) {
        // Pressed
-        console.Println("Type Style Left Key Pressed");
+        //console.Println("Type Style Left Key Pressed");
         playerx -= speed;
     } else {
         // Released
@@ -60,6 +63,37 @@ void Game::RawEvent(SDL_Event event, int _windowWidth, int _windowHeight) {
     } else {
         // Released
     }
+    
+    // Disable if using 2D
+    if (_Pkeyboard[SDL_SCANCODE_LEFT]) {
+        angle -= camsensitivity;
+        camx = sin(angle);
+        camy = -cos(angle);
+    } else {
+        
+    }
+    
+    if (_Pkeyboard[SDL_SCANCODE_RIGHT]) {
+        angle += camsensitivity;
+        camx = sin(angle);
+        camy = -cos(angle);
+    } else {
+        
+    }
+    
+    /*if (_Pkeyboard[SDL_SCANCODE_UP]) {
+        playerx += camx * fraction;
+        playery += camy * fraction;
+    } else {
+        
+    }
+    
+    if (_Pkeyboard[SDL_SCANCODE_DOWN]) {
+        playerx -= camx * fraction;
+        playery -= camy * fraction;
+    } else {
+        
+    }*/
 }
 
 void Game::Event(SDL_Event event) {
@@ -80,6 +114,11 @@ void Game::Event(SDL_Event event) {
         case SDLK_r:
             playery = 0;
             playerx = 0;
+            camy = 0;
+            camx = 0;
+            angle = 0;
+            fraction = 0.1f;
+            console.Println("Engine reset successfully");
             break;
         }
     }
@@ -105,6 +144,9 @@ void Game::Start() {
     glDepthFunc(GL_LESS);
     glEnable(GL_DEPTH_TEST);
     glShadeModel(GL_SMOOTH);
+    
+    camx = sin(angle);
+    camy = -cos(angle);
 }
 
 void Game::Update(int _windowWidth, int _windowHeight) {
@@ -126,9 +168,9 @@ void Game::Render() {
     glLoadIdentity();
     
     // Use in 3D Camera Movement (First Person)
-    // gluLookAt(playerx, 0.0f, (playery*(-1)), playerx, 0.0f, -100, 0, 1, 0);
+    gluLookAt(playerx, 0.0f, (playery*(-1)), playerx+camx, 0.0f, (playery*(-1))+camy, 0, 1, 0);
     // Use in 2D Camera Movement (Top Down)
-    gluLookAt((playerx*(-1)), (playery*(-1)), 0.0f, (playerx*(-1)), (playery*(-1)), -100, 0, 1, 0);
+    //gluLookAt((playerx*(-1)), (playery*(-1)), 0.0f, (playerx*(-1)), (playery*(-1)), -100, 0, 1, 0);
     
     glPushMatrix();
     glTranslated(-11.0f, 0.0f, -10.0f);
@@ -143,6 +185,7 @@ void Game::Render() {
     //const char* deb = (char)playerx + ", " + (char)playery;
     //renderdebug_position2->RenderFont(font, "", 0, 0, 0, {255, 255, 255, 255}, 0.25f, 0.2f);
     cout << "X: " << playerx << " Y: " << playery << endl;
+    cout << "CamX: " << camx << " CamY: " << camy << endl;
     glPushMatrix();
     glTranslated(0, 3.0f, 0);
     glBegin(GL_QUADS);
