@@ -68,6 +68,18 @@ void Game::RawEvent(SDL_Event event, int _windowWidth, int _windowHeight) {
         }
     } else {
     // Disable if using 2D
+        if (_Pkeyboard[SDL_SCANCODE_UP]) {
+            
+        } else {
+            
+        }
+        
+        if (_Pkeyboard[SDL_SCANCODE_DOWN]) {
+            
+        } else {
+            
+        }
+        
         if (_Pkeyboard[SDL_SCANCODE_LEFT]) {
             angle -= camsensitivity;
             camx = sin(angle);
@@ -213,9 +225,9 @@ void Game::Render() {
     glBegin(GL_QUADS);
         glColor3ub(255, 255, 255);
         glVertex2f(0, 0);
-        glVertex2f(0.05f, 0);
-        glVertex2f(0.05f, 0.05f);
-        glVertex2f(0, 0.05f);
+        glVertex2f(0.5f, 0);
+        glVertex2f(0.5f, 0.5f);
+        glVertex2f(0, 0.5f);
     glEnd();
     glPopMatrix();
 }
