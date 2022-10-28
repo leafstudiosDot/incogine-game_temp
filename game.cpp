@@ -26,6 +26,7 @@ Game::~Game() {
 bool is3D = true;
 
 float playerx = 0.0f, playery = 0.0f, speed = 0.05f;
+float hudx = 0.0f, hudy = 0.0f;
 float camx = 0.0f, camy = 0.0f, camsensitivity = 0.05f;
 float angle = 0.0f;
 
@@ -68,6 +69,18 @@ void Game::RawEvent(SDL_Event event, int _windowWidth, int _windowHeight) {
         }
     } else {
     // Disable if using 2D
+        if (_Pkeyboard[SDL_SCANCODE_UP]) {
+            hudy -= 5;
+        } else {
+            
+        }
+        
+        if (_Pkeyboard[SDL_SCANCODE_DOWN]) {
+            hudy += 5;
+        } else {
+            
+        }
+        
         if (_Pkeyboard[SDL_SCANCODE_LEFT]) {
             angle -= camsensitivity;
             camx = sin(angle);
@@ -149,6 +162,22 @@ void Game::Event(SDL_Event event) {
                 break;
         }
     }
+    
+    // Mouse
+    if (event.type == SDL_MOUSEMOTION) {
+        int mouseposx = event.motion.xrel, mouseposy = event.motion.yrel;
+        if (is3D) {
+            if (mouseposx < 1) {
+                angle -= mouseposx * (camsensitivity + 0.01f);
+                camx = sin(angle);
+                camy = -cos(angle);
+            } else {
+                angle += (mouseposx * (camsensitivity + 0.01f))*(-1);
+                camx = sin(angle);
+                camy = -cos(angle);
+            }
+        }
+    }
 }
 
 void Game::Start() {
@@ -166,6 +195,10 @@ void Game::Start() {
     
     camx = sin(angle);
     camy = -cos(angle);
+    
+    if (is3D) {
+        SDL_SetRelativeMouseMode(SDL_TRUE);
+    }
 }
 
 void Game::Update(int _windowWidth, int _windowHeight) {
@@ -222,6 +255,16 @@ void Game::Render() {
 
 void Game::RenderCanvas() {
     // Render HUD
+    glPushMatrix();
+    glTranslatef(hudx, hudy, 0);
+    glBegin(GL_QUADS);
+        glColor3f(1.0f, 0.0f, 0.0);
+        glVertex2f(0.0, 0.0);
+        glVertex2f(10.0, 0.0);
+        glVertex2f(10.0, 10.0);
+        glVertex2f(0.0, 10.0);
+    glEnd();
+    glPopMatrix();
 }
 
 void Game::Destroy() {
