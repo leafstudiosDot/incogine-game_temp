@@ -277,7 +277,7 @@ void Game::RenderCanvas(int _windowWidth, int _windowHeight) {
     _whatsoeva_hud_color.g = 255;
     _whatsoeva_hud_color.b = 255;
     _whatsoeva_hud_color.a = 100;
-    whatsoeva_hud->RenderFontHUD(font, "Hud Font", 40.0f, 90.0f, 0.0f, _whatsoeva_hud_color, 230.0f, 70.0f);
+    whatsoeva_hud->RenderFontHUD(font, "Hud Font", 40.0f, 90.0f, 0.0f, _whatsoeva_hud_color, 230.0f, -70.0f);
     glPopMatrix();
 }
 
