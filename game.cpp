@@ -82,17 +82,19 @@ void Game::RawEvent(SDL_Event event, int _windowWidth, int _windowHeight) {
         }
         
         if (_Pkeyboard[SDL_SCANCODE_LEFT]) {
-            angle -= camsensitivity;
+            /*angle -= camsensitivity;
             camx = sin(angle);
-            camy = -cos(angle);
+            camy = -cos(angle);*/
+            hudx -= 3;
         } else {
             
         }
         
         if (_Pkeyboard[SDL_SCANCODE_RIGHT]) {
-            angle += camsensitivity;
+            /*angle += camsensitivity;
             camx = sin(angle);
-            camy = -cos(angle);
+            camy = -cos(angle);*/
+            hudx += 3;
         } else {
             
         }
@@ -129,7 +131,7 @@ void Game::RawEvent(SDL_Event event, int _windowWidth, int _windowHeight) {
     }
 }
 
-void Game::Event(SDL_Event event) {
+void Game::Event(SDL_Event event, int _windowWidth, int _windowHeight) {
     Console console;
     
     // Quit
@@ -168,11 +170,11 @@ void Game::Event(SDL_Event event) {
         int mouseposx = event.motion.xrel, mouseposy = event.motion.yrel;
         if (is3D) {
             if (mouseposx < 1) {
-                angle -= mouseposx * (camsensitivity + 0.01f);
+                angle -= mouseposx * (camsensitivity - 0.04f);
                 camx = sin(angle);
                 camy = -cos(angle);
             } else {
-                angle += (mouseposx * (camsensitivity + 0.01f))*(-1);
+                angle += (mouseposx * (camsensitivity - 0.04f))*(-1);
                 camx = sin(angle);
                 camy = -cos(angle);
             }
@@ -180,7 +182,7 @@ void Game::Event(SDL_Event event) {
     }
 }
 
-void Game::Start() {
+void Game::Start(int _windowWidth, int _windowHeight) {
     // Executes as game launches
     Console console;
     const char fontFile[] = "../Resources/fonts/def_font.ttf";
@@ -212,7 +214,7 @@ Fonts *whatsoeva;
 
 Fonts *renderdebug_position2;
 
-void Game::Render() {
+void Game::Render(int _windowWidth, int _windowHeight) {
     // Render Game
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
     
@@ -253,7 +255,10 @@ void Game::Render() {
     glPopMatrix();
 }
 
-void Game::RenderCanvas() {
+SDL_Color _whatsoeva_hud_color;
+Fonts *whatsoeva_hud;
+
+void Game::RenderCanvas(int _windowWidth, int _windowHeight) {
     // Render HUD
     glPushMatrix();
     glTranslatef(hudx, hudy, 0);
@@ -264,6 +269,15 @@ void Game::RenderCanvas() {
         glVertex2f(10.0, 10.0);
         glVertex2f(0.0, 10.0);
     glEnd();
+    glPopMatrix();
+    
+    glPushMatrix();
+    glTranslated(hudx, hudy, 0);
+    _whatsoeva_hud_color.r = 255;
+    _whatsoeva_hud_color.g = 255;
+    _whatsoeva_hud_color.b = 255;
+    _whatsoeva_hud_color.a = 100;
+    whatsoeva_hud->RenderFontHUD(font, "Hud Font", 40.0f, 90.0f, 0.0f, _whatsoeva_hud_color, 230.0f, 70.0f);
     glPopMatrix();
 }
 
